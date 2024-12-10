@@ -28,7 +28,7 @@ jobs:
       - name: install dependencies
         run: cd starter/frontend && npm ci
 
-      - name: run lint
+      - name: run test
         run: cd starter/frontend && npm test
 
   lint:
