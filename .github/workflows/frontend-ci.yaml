@@ -1,0 +1,56 @@
+name: frontend-ci-workflow
+
+# Triggers for the workflow
+on:
+  # Manual trigger using the workflow_dispatch event
+  workflow_dispatch:
+      
+  # Automatic trigger on pull request events targeting the main branch
+  pull_request:
+    branches:
+      - main
+
+#start of cdefing the jobs and their steps
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js 
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm' #cache package 
+          cache-dependency-path: starter/frontend/package-lock.json  # Will generate hash from the target file for primary key
+    
+      - name: install dependencies
+        run: cd starter/frontend && npm ci
+
+      - name: run lint
+        run: cd starter/frontend && npm test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js 
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm' #cache package 
+          cache-dependency-path: starter/frontend/package-lock.json  # Will generate hash from the target file for primary key
+    
+      - name: install dependencies
+        run: cd starter/frontend && npm ci
+
+      - name: run lint
+        run: cd starter/frontend && npm lint
+  
+  # build:
+  #   needs: [lint, test]
+  #   runs-on: ubuntu-latest
+    
