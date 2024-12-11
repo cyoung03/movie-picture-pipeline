@@ -78,6 +78,9 @@ jobs:
         env:
           MY_SECRET: ${{ secrets.AWS_ACCESS_KEY_ID }}
           API_URL: ${{ vars.REACT_APP_MOVIE_API_URL }}
+        run: |
+          echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+          echo "REACT_APP_MOVIE_API_URL: $REACT_APP_MOVIE_API_URL"
 
 
 
