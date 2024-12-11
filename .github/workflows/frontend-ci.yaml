@@ -69,5 +69,5 @@ jobs:
         run: cd starter/frontend && npm ci      
 
       - name: setup docker build
-        uses: docker/setup-buildx-action-action@v3
+        uses: docker/setup-buildx-action@v3
     
