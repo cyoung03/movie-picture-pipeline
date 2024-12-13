@@ -79,10 +79,8 @@ jobs:
 
       #build fron-end docker image
       - name: build frontend docker image
-        env:
-          REPOSITORY: ${{vars.FRONTEND_REPOSITORY}} #env var for repo name
-          IMAGE_TAG: ${{ github.sha }}
-          REACT_APP_MOVIE_API_URL: ${{vars.REACT_APP_MOVIE_API_URL}} #env var for repo name
         run: |
           cd starter/frontend
-          docker build -t $REPOSITORY:$IMAGE_TAG .
+          docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=frontend:latest .
+
+        
