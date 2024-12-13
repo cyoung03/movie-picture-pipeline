@@ -24,12 +24,12 @@ jobs:
       - name: Change to backend directory
         run: cd starter/backend
 
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.local/share/virtualenvs
-          key: ${{ hashFiles('Pipfile.lock') }}
+      # - name: Cache dependencies
+      #   id: cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ~/.local/share/virtualenvs
+      #     key: ${{hashFiles('Pipfile.lock')}}
 
       - name: Run test
         run: pipenv run test
