@@ -27,3 +27,19 @@ jobs:
       - name: Run test
         run: cd starter/backend && pipenv run test
 
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: pip install pipenv
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: cd starter/backend && pipenv install --dev
+
+      - name: Run lint
+        run: cd starter/backend && pipenv run lint
+
+
