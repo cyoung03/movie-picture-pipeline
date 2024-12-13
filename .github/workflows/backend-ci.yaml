@@ -1,0 +1,36 @@
+name: "Backend Continuous Integration"
+
+# Triggers for the workflow
+on:
+  # Manual trigger using the workflow_dispatch event
+  workflow_dispatch:
+      
+  # Automatic trigger on pull request events targeting the main branch
+  pull_request:
+    branches:
+      - main
+
+#start of cdefing the jobs and their steps
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: pip install pipenv
+        run: pip install pipenv
+
+      - name: Change to backend directory
+        run: cd starter/backend
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/virtualenvs
+          key: deps-python-${{ hashFiles('Pipfile.lock') }}
+
+      - name: Run test
+        run: pipenv run test
+
