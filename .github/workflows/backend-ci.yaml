@@ -24,12 +24,8 @@ jobs:
       - name: Change to backend directory
         run: cd starter/backend
 
-      # - name: Cache dependencies
-      #   id: cache
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: ~/.local/share/virtualenvs
-      #     key: ${{hashFiles('Pipfile.lock')}}
+      - name: Install dependencies
+        run: pipenv install --dev --ignore-pipfile
 
       - name: Run test
         run: pipenv run test
