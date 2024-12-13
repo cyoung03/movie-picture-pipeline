@@ -42,4 +42,17 @@ jobs:
       - name: Run lint
         run: cd starter/backend && pipenv run lint
 
+  build:
+    runs-on: ubuntu-latest
+    needs: [test, lint]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: pip install pipenv
+        run: pip install pipenv
+
+      - name: build mp-backend docker image
+        run: cd starter/backend && docker build --tag mp-backend:latest .
+
 

@@ -76,11 +76,8 @@ jobs:
 
       - name: setup docker build
         uses: docker/setup-buildx-action@v3
-
       
       - name: build frontend docker image
-        run: |
-          cd starter/frontend
-          docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=frontend:latest .
+        run: cd starter/frontend && docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=mp-frontend:latest .
 
         
