@@ -77,7 +77,7 @@ jobs:
       - name: setup docker build
         uses: docker/setup-buildx-action@v3
 
-      #build fron-end docker image
+      
       - name: build frontend docker image
         run: |
           cd starter/frontend
