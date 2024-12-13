@@ -21,12 +21,9 @@ jobs:
       - name: pip install pipenv
         run: pip install pipenv
 
-      - name: Change to backend directory
-        run: cd starter/backend
-
       - name: Install dependencies
         run: pipenv install --dev
 
       - name: Run test
-        run: pipenv run test
+        run: cd starter/backend && pipenv run test
 
