@@ -91,12 +91,23 @@ jobs:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }} #get the registry name from the login into ECR step.
           REPOSITORY: ${{vars.FRONTEND_REPOSITORY}} #env var for repo name
           IMAGE_TAG: ${{ github.sha }}
-          REACT_APP_MOVIE_API_URL: ${{vars.REACT_APP_MOVIE_API_URL}} #env var for repo name
+          REACT_APP_MOVIE_API_URL: ${{vars.REACT_APP_MOVIE_API_URL}}
         run: |
           cd starter/frontend
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
     #There should be a step that deploys the application using kubectl to the eks cluster
+      - name: update Kubeconfig
+        run: aws eks update-kubeconfig --name cluster --region us-east-1
+
+      - name: Deploy Docker Image to cluster
+        env:
+          REPOSITORY: ${{vars.FRONTEND_REPOSITORY}} 
+          IMAGE_TAG: latest         
+        run: |
+          cd starter/frontend/k8s
+          kustomize edit set image frontend=146566234834.dkr.ecr.us-east-1.amazonaws.com/$REPO_NAME:$IMAGE_TAG
+          kustomize build | kubectl apply -f -
 
     
