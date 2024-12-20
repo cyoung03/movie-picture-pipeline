@@ -111,6 +111,9 @@ jobs:
         run: |
           cd starter/frontend/k8s
           kustomize edit set image frontend=146566234834.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$IMAGE_TAG
-          kustomize build | kubectl apply -f -
+         
+         
+         
+         #kustomize build | kubectl apply -f -
 
     
