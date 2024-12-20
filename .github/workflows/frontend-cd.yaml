@@ -104,16 +104,17 @@ jobs:
       - name: update Kubeconfig
         run: aws eks update-kubeconfig --name cluster --region us-east-1
 
-      - name: Deploy Docker Image to cluster
+      - name: Set Image to cluster
         env:
           REPOSITORY: ${{vars.FRONTEND_REPOSITORY}} 
           IMAGE_TAG: ${{ github.sha }}       
         run: |
           cd starter/frontend/k8s
           kustomize edit set image frontend=146566234834.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$IMAGE_TAG
-         
-         
-         
-         #kustomize build | kubectl apply -f -
+
+      - name: Apply K8s to cluster
+        run: |
+          cd starter/frontend/k8s                          
+          kustomize build | kubectl apply -f -
 
     
