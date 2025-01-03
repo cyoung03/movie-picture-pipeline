@@ -1,0 +1,96 @@
+name: "Backend Continuous Deployment"
+
+# Triggers for the workflow
+on:
+  # Manual trigger using the workflow_dispatch event
+  workflow_dispatch:
+      
+  # Automatic trigger on pull request events targeting the main branch
+  pull_request:
+    branches:
+      - main
+
+#start of cefining the jobs and their steps
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: pip install pipenv
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: cd starter/backend && pipenv install --dev
+
+      - name: Run test
+        run: cd starter/backend && pipenv run test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: pip install pipenv
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: cd starter/backend && pipenv install --dev
+
+      - name: Run lint
+        run: cd starter/backend && pipenv run lint
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [test, lint]
+
+    environment:
+      name: dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: pip install pipenv
+        run: pip install pipenv
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }} #get the registry name from the login into ECR step.
+          REPOSITORY: ${{vars.BACKEND_REPOSITORY}} #env var for repo name
+          IMAGE_TAG: ${{ github.sha }}
+          REACT_APP_MOVIE_API_URL: ${{vars.REACT_APP_MOVIE_API_URL}}
+        run: |
+          cd starter/backend
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+
+      - name: update Kubeconfig
+        run: aws eks update-kubeconfig --name cluster --region us-east-1
+
+      - name: Set Image to cluster
+        env:
+          REPOSITORY: ${{vars.BACKEND_REPOSITORY}} 
+          IMAGE_TAG: ${{ github.sha }}       
+        run: |
+          cd starter/backend/k8s
+          kustomize edit set image backend=146566234834.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$IMAGE_TAG
+
+      - name: Apply K8s to cluster
+        run: |
+          cd starter/backend/k8s                          
+          kustomize build | kubectl apply -f -
