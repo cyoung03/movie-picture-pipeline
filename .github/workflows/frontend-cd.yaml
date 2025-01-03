@@ -99,7 +99,6 @@ jobs:
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
-    #There should be a step that deploys the application using kubectl to the eks cluster
 
       - name: update Kubeconfig
         run: aws eks update-kubeconfig --name cluster --region us-east-1
