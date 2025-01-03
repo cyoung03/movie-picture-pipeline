@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
       
   # Automatic trigger on pull request events targeting the main branch
-  pull_request:
+  push:
     branches:
       - main
 
