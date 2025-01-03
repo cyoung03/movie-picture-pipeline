@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v3
       
       - name: pip install pipenv
-        run: pip install pipenv
+        run: pip install pipenv --python /usr/bin/python3.8
 
       - name: Install dependencies
         run: cd starter/backend && pipenv install --dev
@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@v3
       
       - name: pip install pipenv
-        run: pip install pipenv
+        run: pip install pipenv --python /usr/bin/python3.8
 
       - name: Install dependencies
         run: cd starter/backend && pipenv install --dev
@@ -51,6 +51,9 @@ jobs:
       
       - name: pip install pipenv
         run: pip install pipenv --python /usr/bin/python3.8
+
+      - name: Install dependencies
+        run: cd starter/backend && pipenv install --dev
 
       - name: build mp-backend docker image
         run: cd starter/backend && docker build --tag mp-backend:latest .
