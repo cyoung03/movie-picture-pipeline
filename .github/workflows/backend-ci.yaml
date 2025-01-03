@@ -17,9 +17,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
       - name: pip install pipenv
-        run: pip install pipenv --python /usr/bin/python3.8
+        run: pip install pipenv
 
       - name: Install dependencies
         run: cd starter/backend && pipenv install --dev
@@ -32,9 +38,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
       
       - name: pip install pipenv
-        run: pip install pipenv --python /usr/bin/python3.8
+        run: pip install pipenv
 
       - name: Install dependencies
         run: cd starter/backend && pipenv install --dev
@@ -48,12 +60,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
       - name: pip install pipenv
-        run: pip install pipenv --python /usr/bin/python3.8
+        run: pip install pipenv
 
       - name: Install dependencies
-        run: cd starter/backend && pipenv install --dev
+        run: cd starter/backend && pipenv
 
       - name: build mp-backend docker image
         run: cd starter/backend && docker build --tag mp-backend:latest .
